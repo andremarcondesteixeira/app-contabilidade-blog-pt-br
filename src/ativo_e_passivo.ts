@@ -15,16 +15,16 @@ export type Passivo = CoisaComValorMonetario & {
 };
 
 export enum Tangibilidade {
-    Tangivel,
-    Intangivel,
+    Tangivel = "Tangível",
+    Intangivel = "Intangível",
 }
 
 export enum Liquidez {
-    Circulante,
-    NaoCirculante,
+    Circulante = "Circulante",
+    NaoCirculante = "Não Circulante",
 }
 
 export enum CirculanteFinanceiroOuOperacional {
-    Financeiro,
-    Operacional,
+    Financeiro = "Circulante Financeiro",
+    Operacional = "Circulante Operacional",
 }

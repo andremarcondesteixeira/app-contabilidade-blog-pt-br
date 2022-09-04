@@ -26,6 +26,10 @@ export class Dinheiro {
         }
     }
 
+    get moeda() {
+        return this._moeda;
+    }
+
     mais(d: Dinheiro) {
         this.checarMoeda(d);
         return new Dinheiro(this._valorEmCentavos + d._valorEmCentavos, this._moeda);
@@ -44,6 +48,31 @@ export class Dinheiro {
         return new Dinheiro(this._valorEmCentavos / fator, this._moeda);
     }
 
+    maiorQue(d: Dinheiro) {
+        this.checarMoeda(d);
+        return this._valorEmCentavos > d._valorEmCentavos;
+    }
+
+    maiorOuIgualA(d: Dinheiro) {
+        this.checarMoeda(d);
+        return this._valorEmCentavos >= d._valorEmCentavos;
+    }
+
+    menorQue(d: Dinheiro) {
+        this.checarMoeda(d);
+        return this._valorEmCentavos < d._valorEmCentavos;
+    }
+
+    menorOuIgualA(d: Dinheiro) {
+        this.checarMoeda(d);
+        return this._valorEmCentavos <= d._valorEmCentavos;
+    }
+
+    igualA(d: Dinheiro) {
+        this.checarMoeda(d);
+        return this._valorEmCentavos === d._valorEmCentavos;
+    }
+
     formatar(linguagem: string) {
         return new Intl.NumberFormat(linguagem, {
             style: "currency",
@@ -52,6 +81,6 @@ export class Dinheiro {
     }
 }
 
-export default function dinheiro(valorEmCentavos: number, moeda: CodigoMoeda) {
-    return new Dinheiro(valorEmCentavos, Moedas[moeda]);
+export default function dinheiro(valorEmCentavos: number, moeda: Moeda | CodigoMoeda) {
+    return new Dinheiro(valorEmCentavos, moeda instanceof Moeda ? moeda : Moedas[moeda]);
 }
