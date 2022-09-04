@@ -9,9 +9,9 @@ import {
 import dinheiro, { CodigoMoeda, Moeda, Moedas } from "./dinheiro";
 
 export enum SituacaoPatrimonial {
-    Positiva = "positiva",
-    Nula = "nula",
-    Negativa = "negativa",
+    Positiva = "Positiva",
+    Nula = "Nula",
+    Negativa = "Negativa",
 }
 
 export class Empresa {
