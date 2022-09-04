@@ -1,15 +1,41 @@
-import express, { Request, Response } from "express";
-import dotenv from "dotenv";
+import {
+    CirculanteFinanceiroOuOperacional,
+    Liquidez,
+    Tangibilidade,
+    type Ativo,
+    type Passivo,
+} from "./ativo_e_passivo";
+import dinheiro from "./dinheiro";
+import { Empresa } from "./empresa";
 
-dotenv.config();
+const empresaComLucro = new Empresa(
+    [
+        {
+            nome: "saldo em conta bancária",
+            valor: dinheiro(500_000_00, "BRL"),
+            liquidez: Liquidez.Circulante,
+            tangibilidade: Tangibilidade.Tangivel,
+        },
+        {
+            nome: "matéria prima",
+            valor: dinheiro(200_000_00, "BRL"),
+            liquidez: Liquidez.Circulante,
+            tangibilidade: Tangibilidade.Tangivel,
+        },
+    ] as Ativo[],
+    [
+        {
+            nome: "Salários do mês",
+            valor: dinheiro(100_000_00, "BRL"),
+            liquidez: CirculanteFinanceiroOuOperacional.Operacional,
+        },
+        {
+            nome: "Fornecedores do mês",
+            valor: dinheiro(50_000, "BRL"),
+            liquidez: CirculanteFinanceiroOuOperacional.Operacional,
+        },
+    ] as Passivo[],
+    "BRL"
+);
 
-const app = express();
-const port = parseInt(process.env["PORT"] ?? '8080');
-
-app.get("/", (_req: Request, res: Response) => {
-    res.send("Hello World!");
-});
-
-app.listen(port, () => {
-    console.log(`Server is listening at http://localhost:${port}`);
-});
+console.log(JSON.stringify(empresaComLucro.patrimonioLiquido, null, 4));
