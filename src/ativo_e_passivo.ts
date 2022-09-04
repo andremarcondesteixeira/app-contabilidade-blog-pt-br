@@ -26,61 +26,52 @@ export enum Liquidez {
 }
 
 export enum CirculanteFinanceiroOuOperacional {
-    CirculanteFinanceiro,
-    CirculanteOperacional,
+    Financeiro,
+    Operacional,
 }
 
-export const Tangivel = Tangibilidade.Tangivel;
-export const Intangivel = Tangibilidade.Intangivel;
-export const Circulante = Liquidez.Circulante;
-export const CirculanteFinanceiro =
-    CirculanteFinanceiroOuOperacional.CirculanteFinanceiro;
-export const CirculanteOperacional =
-    CirculanteFinanceiroOuOperacional.CirculanteOperacional;
-export const NaoCirculante = Liquidez.NaoCirculante;
-
 // exemplo
-const meusAtivos: Ativo[] = [
+const exemplosDeAtivos: Ativo[] = [
     {
         nome: "Dinheiro em caixa",
         valor: dinheiro(5_000_00, "BRL"),
-        tangibilidade: Tangivel,
-        liquidez: Circulante,
+        tangibilidade: Tangibilidade.Tangivel,
+        liquidez: Liquidez.Circulante,
     },
     {
         nome: "Imóvel",
         valor: dinheiro(500_000_00, "BRL"),
-        tangibilidade: Tangivel,
-        liquidez: NaoCirculante,
+        tangibilidade: Tangibilidade.Tangivel,
+        liquidez: Liquidez.NaoCirculante,
     },
     {
         nome: "Saldo em conta bancária",
         valor: dinheiro(50_000_00, "BRL"),
-        tangibilidade: Intangivel,
-        liquidez: Circulante,
+        tangibilidade: Tangibilidade.Intangivel,
+        liquidez: Liquidez.Circulante,
     },
     {
         nome: "Marga registrada",
         valor: dinheiro(1_000_000_00, "BRL"),
-        tangibilidade: Intangivel,
-        liquidez: NaoCirculante,
+        tangibilidade: Tangibilidade.Intangivel,
+        liquidez: Liquidez.NaoCirculante,
     },
 ];
 
-const meusPassivos: Passivo[] = [
+const exemplosDePassivos: Passivo[] = [
     {
         nome: "Saldo negativo em conta bancária",
         valor: dinheiro(1000_00, "BRL"),
-        liquidez: CirculanteFinanceiro,
+        liquidez: CirculanteFinanceiroOuOperacional.Financeiro,
     },
     {
         nome: "Salários do mês",
         valor: dinheiro(100_000_00, "BRL"),
-        liquidez: CirculanteOperacional,
+        liquidez: CirculanteFinanceiroOuOperacional.Operacional,
     },
     {
         nome: "Empréstimo de longo prazo",
         valor: dinheiro(200_000_00, "BRL"),
-        liquidez: NaoCirculante,
+        liquidez: Liquidez.NaoCirculante,
     },
 ];

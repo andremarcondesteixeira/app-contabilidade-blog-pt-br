@@ -1,10 +1,7 @@
 export type CodigoMoeda = "BRL" | "USD";
 
 export class Moeda {
-    constructor(
-        private _codigoIso: CodigoMoeda,
-        private _casasDecimais: number
-    ) {}
+    constructor(private _codigoIso: CodigoMoeda, private _casasDecimais: number) {}
 
     get codigoIso() {
         return this._codigoIso;
@@ -31,18 +28,12 @@ export class Dinheiro {
 
     mais(d: Dinheiro) {
         this.checarMoeda(d);
-        return new Dinheiro(
-            this._valorEmCentavos + d._valorEmCentavos,
-            this._moeda
-        );
+        return new Dinheiro(this._valorEmCentavos + d._valorEmCentavos, this._moeda);
     }
 
     menos(d: Dinheiro) {
         this.checarMoeda(d);
-        return new Dinheiro(
-            this._valorEmCentavos - d._valorEmCentavos,
-            this._moeda
-        );
+        return new Dinheiro(this._valorEmCentavos - d._valorEmCentavos, this._moeda);
     }
 
     vezes(fator: number) {
@@ -57,9 +48,7 @@ export class Dinheiro {
         return new Intl.NumberFormat(linguagem, {
             style: "currency",
             currency: this._moeda.codigoIso,
-        }).format(
-            this._valorEmCentavos / Math.pow(10, this._moeda.casasDecimais)
-        );
+        }).format(this._valorEmCentavos / Math.pow(10, this._moeda.casasDecimais));
     }
 }
 
