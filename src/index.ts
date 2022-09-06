@@ -6,9 +6,9 @@ import {
     type Passivo,
 } from "./ativo_e_passivo";
 import dinheiro from "./dinheiro";
-import { Empresa } from "./empresa";
+import { gerarRelatorioDeBalancoPatrimonial } from "./balanco_patrimonial";
 
-const empresaComLucro = new Empresa(
+const relatório = gerarRelatorioDeBalancoPatrimonial(
     [
         {
             nome: "saldo em conta bancária",
@@ -35,7 +35,7 @@ const empresaComLucro = new Empresa(
             liquidez: CirculanteFinanceiroOuOperacional.Operacional,
         },
     ] as Passivo[],
-    "BRL"
+    dinheiro(1000_00, "BRL")
 );
 
-console.log(JSON.stringify(empresaComLucro.patrimonioLiquido, null, 4));
+console.log(JSON.stringify(relatório, null, 4));
