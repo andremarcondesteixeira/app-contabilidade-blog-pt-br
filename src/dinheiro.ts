@@ -1,86 +1,54 @@
-export type CodigoMoeda = "BRL" | "USD";
-
-export class Moeda {
-    constructor(private _codigoIso: CodigoMoeda, private _casasDecimais: number) {}
-
-    get codigoIso() {
-        return this._codigoIso;
-    }
-
-    get casasDecimais() {
-        return this._casasDecimais;
-    }
-}
-
-export const Moedas = Object.freeze({
-    BRL: new Moeda("BRL", 2),
-    USD: new Moeda("USD", 2),
-});
+import Dinero from "dinero.js";
 
 export class Dinheiro {
-    constructor(private _valorEmCentavos: number, private _moeda: Moeda) {}
+    private _objetoEncapsulado: Dinero.Dinero;
 
-    private checarMoeda(d: Dinheiro) {
-        if (this._moeda !== d._moeda) {
-            throw new TypeError("Tentativa de operação com moedas diferentes");
-        }
+    constructor(moeda: Moeda, valorEmCentavos: number) {
+        this._objetoEncapsulado = Dinero({
+            amount: valorEmCentavos,
+            currency: moeda,
+        });
     }
 
-    get moeda() {
-        return this._moeda;
+    adicionar(other: Dinheiro) {
+        return this.construirAPartirDoObjetoEncapulado(this._objetoEncapsulado.add(other._objetoEncapsulado));
     }
 
-    mais(d: Dinheiro) {
-        this.checarMoeda(d);
-        return new Dinheiro(this._valorEmCentavos + d._valorEmCentavos, this._moeda);
+    subtrair(other: Dinheiro) {
+        return this.construirAPartirDoObjetoEncapulado(this._objetoEncapsulado.subtract(other._objetoEncapsulado));
     }
 
-    menos(d: Dinheiro) {
-        this.checarMoeda(d);
-        return new Dinheiro(this._valorEmCentavos - d._valorEmCentavos, this._moeda);
+    multiplicar(factor: number) {
+        return this.construirAPartirDoObjetoEncapulado(this._objetoEncapsulado.multiply(factor));
     }
 
-    vezes(fator: number) {
-        return new Dinheiro(this._valorEmCentavos * fator, this._moeda);
+    dividir(factor: number) {
+        return this.construirAPartirDoObjetoEncapulado(this._objetoEncapsulado.divide(factor));
     }
 
-    divididoPor(fator: number) {
-        return new Dinheiro(this._valorEmCentavos / fator, this._moeda);
+    menorQue(other: Dinheiro) {
+        return this._objetoEncapsulado.lessThan(other._objetoEncapsulado);
     }
 
-    maiorQue(d: Dinheiro) {
-        this.checarMoeda(d);
-        return this._valorEmCentavos > d._valorEmCentavos;
+    menorOuIgualA(other: Dinheiro) {
+        return this._objetoEncapsulado.lessThanOrEqual(other._objetoEncapsulado);
     }
 
-    maiorOuIgualA(d: Dinheiro) {
-        this.checarMoeda(d);
-        return this._valorEmCentavos >= d._valorEmCentavos;
+    igualA(other: Dinheiro) {
+        return this._objetoEncapsulado.equalsTo(other._objetoEncapsulado);
     }
 
-    menorQue(d: Dinheiro) {
-        this.checarMoeda(d);
-        return this._valorEmCentavos < d._valorEmCentavos;
+    maiorOuIgualA(other: Dinheiro) {
+        return this._objetoEncapsulado.greaterThanOrEqual(other._objetoEncapsulado);
     }
 
-    menorOuIgualA(d: Dinheiro) {
-        this.checarMoeda(d);
-        return this._valorEmCentavos <= d._valorEmCentavos;
+    maiorQue(other: Dinheiro) {
+        return this._objetoEncapsulado.greaterThan(other._objetoEncapsulado);
     }
 
-    igualA(d: Dinheiro) {
-        this.checarMoeda(d);
-        return this._valorEmCentavos === d._valorEmCentavos;
-    }
-
-    formatar(linguagem: string) {
-        return new Intl.NumberFormat(linguagem, {
-            style: "currency",
-            currency: this._moeda.codigoIso,
-        }).format(this._valorEmCentavos / Math.pow(10, this._moeda.casasDecimais));
+    private construirAPartirDoObjetoEncapulado(obj: Dinero.Dinero) {
+        return new Dinheiro(obj.getCurrency(), obj.getAmount());
     }
 }
 
-export default function dinheiro(valorEmCentavos: number, moeda: Moeda | CodigoMoeda) {
-    return new Dinheiro(valorEmCentavos, moeda instanceof Moeda ? moeda : Moedas[moeda]);
-}
+export type Moeda = Dinero.Currency;
