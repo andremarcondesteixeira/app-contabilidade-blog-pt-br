@@ -61,3 +61,7 @@ export class Dinheiro {
 }
 
 export type Moeda = Dinero.Currency;
+
+export default function dinheiro(moeda: Moeda, valorEmCentavos: number) {
+    return new Dinheiro(moeda, valorEmCentavos);
+}
