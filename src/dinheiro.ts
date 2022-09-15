@@ -10,6 +10,10 @@ export class Dinheiro {
         });
     }
 
+    get moeda(): Moeda {
+        return this._moeda;
+    }
+
     adicionar(other: Dinheiro) {
         return this.construirAPartirDoObjetoEncapulado(this._objetoEncapsulado.add(other._objetoEncapsulado));
     }

@@ -10,7 +10,7 @@ export function gerarRelatorioDeBalancoPatrimonial(ativos: Ativo[], passivos: Pa
     const passivosNaoCirculantes = passivos.filter((passivo) => passivo.liquidez === Liquidez.NaoCirculante);
     const totalPassivos = somarFatosContabeis(passivos);
 
-    const lucroOuPrejuizo = totalAtivos.menos(totalPassivos).menos(capitalSocial);
+    const lucroOuPrejuizo = totalAtivos.subtrair(totalPassivos).subtrair(capitalSocial);
     const itensPatrimonioLiquido = [
         new Passivo({
             nome: "Capital social",
@@ -18,7 +18,7 @@ export function gerarRelatorioDeBalancoPatrimonial(ativos: Ativo[], passivos: Pa
             valor: capitalSocial,
         }),
         new Passivo({
-            nome: `${lucroOuPrejuizo.maiorOuIgualA(dinheiro(0, capitalSocial.moeda)) ? "Lucro" : "Prejuízo"} acumulado`,
+            nome: `${lucroOuPrejuizo.maiorOuIgualA(dinheiro(capitalSocial.moeda, 0)) ? "Lucro" : "Prejuízo"} acumulado`,
             liquidez: Liquidez.NaoCirculante,
             valor: lucroOuPrejuizo,
         }),
@@ -50,20 +50,20 @@ export function gerarRelatorioDeBalancoPatrimonial(ativos: Ativo[], passivos: Pa
                 itens: itensPatrimonioLiquido,
                 total: valorPatrimonioLiquido,
             },
-            total: totalPassivos.mais(valorPatrimonioLiquido),
+            total: totalPassivos.adicionar(valorPatrimonioLiquido),
         },
         situacaoPatrimonial: situacaoPatrimonial(valorPatrimonioLiquido),
     };
 
     function somarFatosContabeis(fatos: CoisaComValorMonetario[]) {
         return fatos.reduce((total, ativo) => {
-            return total.mais(ativo.valor);
-        }, dinheiro(0, capitalSocial.moeda));
+            return total.adicionar(ativo.valor);
+        }, dinheiro(capitalSocial.moeda, 0));
     }
 }
 
 function situacaoPatrimonial(patrimonioLiquido: Dinheiro) {
-    const zero = dinheiro(0, patrimonioLiquido.moeda);
+    const zero = dinheiro(patrimonioLiquido.moeda, 0);
 
     if (patrimonioLiquido.maiorQue(zero)) {
         return SituacaoPatrimonial.Positiva;
