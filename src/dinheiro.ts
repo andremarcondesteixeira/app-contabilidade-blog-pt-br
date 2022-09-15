@@ -3,10 +3,10 @@ import Dinero from "dinero.js";
 export class Dinheiro {
     private _objetoEncapsulado: Dinero.Dinero;
 
-    constructor(moeda: Moeda, valorEmCentavos: number) {
+    constructor(private _moeda: Moeda, private _valorEmCentavos: number) {
         this._objetoEncapsulado = Dinero({
-            amount: valorEmCentavos,
-            currency: moeda,
+            amount: _valorEmCentavos,
+            currency: _moeda,
         });
     }
 
@@ -44,6 +44,15 @@ export class Dinheiro {
 
     maiorQue(other: Dinheiro) {
         return this._objetoEncapsulado.greaterThan(other._objetoEncapsulado);
+    }
+
+    formatar(linguagem: string) {
+        return new Intl.NumberFormat(linguagem, {
+            style: "currency",
+            currency: this._moeda,
+            // por enquanto, ignoramos o fato de outras moedas terem divisões diferentes
+            // de centavos para simplificar o código
+        }).format(this._valorEmCentavos / 100);
     }
 
     private construirAPartirDoObjetoEncapulado(obj: Dinero.Dinero) {
