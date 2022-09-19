@@ -1,4 +1,4 @@
-import type { Dinheiro } from "./dinheiro";
+import type { Dinheiro } from "./nos_artigos/dinheiro";
 
 export abstract class CoisaComValorMonetario {
     constructor(protected _nome: string, protected _valor: Dinheiro) {}

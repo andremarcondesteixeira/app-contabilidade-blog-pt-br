@@ -1,5 +1,5 @@
 import { Ativo, CoisaComValorMonetario, Liquidez, Passivo } from "./ativo_e_passivo";
-import dinheiro, { Dinheiro } from "./dinheiro";
+import dinheiro, { Dinheiro } from "./nos_artigos/dinheiro";
 
 export function gerarRelatorioDeBalancoPatrimonial(ativos: Ativo[], passivos: Passivo[], capitalSocial: Dinheiro) {
     const ativosCirculantes = ativos.filter((ativo) => ativo.liquidez === Liquidez.Circulante);

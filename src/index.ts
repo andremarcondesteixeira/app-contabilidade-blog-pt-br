@@ -7,18 +7,18 @@ import {
     Tangibilidade,
 } from "./ativo_e_passivo";
 import { gerarRelatorioDeBalancoPatrimonial } from "./balanco_patrimonial";
-import dinheiro from "./dinheiro";
+import dinheiro from "./nos_artigos/dinheiro";
 
 const ativos = [
     new Ativo({
         nome: "saldo em conta bancária",
-        valor: dinheiro(500_000_00, "BRL"),
+        valor: dinheiro("BRL", 500_000_00),
         liquidez: Liquidez.Circulante,
         tangibilidade: Tangibilidade.Tangivel,
     }),
     new Ativo({
         nome: "matéria prima",
-        valor: dinheiro(200_000_00, "BRL"),
+        valor: dinheiro("BRL", 200_000_00),
         liquidez: Liquidez.Circulante,
         tangibilidade: Tangibilidade.Tangivel,
     }),
@@ -26,16 +26,16 @@ const ativos = [
 const passivos = [
     new Passivo({
         nome: "Salários do mês",
-        valor: dinheiro(100_000_00, "BRL"),
+        valor: dinheiro("BRL", 100_000_00),
         liquidez: CirculanteFinanceiroOuOperacional.Operacional,
     }),
     new Passivo({
         nome: "Fornecedores do mês",
-        valor: dinheiro(50_000, "BRL"),
+        valor: dinheiro("BRL", 50_000),
         liquidez: CirculanteFinanceiroOuOperacional.Operacional,
     }),
 ];
-const capitalSocial = dinheiro(1000_00, "BRL");
+const capitalSocial = dinheiro("BRL", 1000_00);
 const relatorio = gerarRelatorioDeBalancoPatrimonial(ativos, passivos, capitalSocial);
 
 // o trecho a seguir é somente para deixar a saída do console mais legível
