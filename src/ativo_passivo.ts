@@ -1,4 +1,5 @@
 import type { Dinheiro } from "./dinheiro";
+import dinheiro from "./dinheiro";
 
 export abstract class CoisaPrecificavel {
     constructor(private _nome: string, private _valor: Dinheiro) {}
@@ -22,4 +23,10 @@ export class Passivo extends CoisaPrecificavel {
     constructor(nome: string, valor: Dinheiro) {
         super(nome, valor);
     }
+}
+
+export function somar(itens: CoisaPrecificavel[]) {
+    return itens.reduce((total, item) => {
+        return total.adicionar(item.valor);
+    }, dinheiro("BRL", 0));
 }

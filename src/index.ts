@@ -1,138 +1,20 @@
-import {
-    Ativo,
-    CirculanteFinanceiroOuOperacional,
-    CoisaComValorMonetario,
-    Liquidez,
-    Passivo,
-    Tangibilidade,
-} from "./ativo_e_passivo";
-import { gerarRelatorioDeBalancoPatrimonial } from "./balanco_patrimonial";
-import dinheiro from "./nos_artigos/dinheiro";
+import { Ativo, Passivo, somar } from "./ativo_passivo";
+import dinheiro from "./dinheiro";
 
-const ativos = [
-    new Ativo({
-        nome: "saldo em conta bancária",
-        valor: dinheiro("BRL", 500_000_00),
-        liquidez: Liquidez.Circulante,
-        tangibilidade: Tangibilidade.Tangivel,
-    }),
-    new Ativo({
-        nome: "matéria prima",
-        valor: dinheiro("BRL", 200_000_00),
-        liquidez: Liquidez.Circulante,
-        tangibilidade: Tangibilidade.Tangivel,
-    }),
+const ativo: Ativo[] = [
+    new Ativo("Matéria prima", dinheiro("BRL", 15_000_00)),
+    new Ativo("Faturamento", dinheiro("BRL", 25_000_00)),
 ];
-const passivos = [
-    new Passivo({
-        nome: "Salários do mês",
-        valor: dinheiro("BRL", 100_000_00),
-        liquidez: CirculanteFinanceiroOuOperacional.Operacional,
-    }),
-    new Passivo({
-        nome: "Fornecedores do mês",
-        valor: dinheiro("BRL", 50_000),
-        liquidez: CirculanteFinanceiroOuOperacional.Operacional,
-    }),
+
+const passivo: Passivo[] = [new Passivo("Custos", dinheiro("BRL", 10_000_00))];
+
+// O capital social faz parte do patrimônio líquido
+const patrimonioLiquido: Passivo[] = [
+    new Passivo("Capital social", dinheiro("BRL", 20_000_00)),
+    new Passivo("Lucros acumulados", dinheiro("BRL", 10_000_00)),
 ];
-const capitalSocial = dinheiro("BRL", 1000_00);
-const relatorio = gerarRelatorioDeBalancoPatrimonial(ativos, passivos, capitalSocial);
 
-// o trecho a seguir é somente para deixar a saída do console mais legível
-const relatorioFormatado = {
-    ativos: {
-        circulantes: {
-            itens: formatar(relatorio.ativos.circulantes.itens),
-            total: relatorio.ativos.circulantes.total.formatar("pt-BR"),
-        },
-        naoCirculantes: {
-            itens: formatar(relatorio.ativos.naoCirculantes.itens),
-            total: relatorio.ativos.naoCirculantes.total.formatar("pt-BR"),
-        },
-        total: relatorio.ativos.total.formatar("pt-BR"),
-    },
-    passivos: {
-        circulantes: {
-            itens: formatar(relatorio.passivos.circulantes.itens),
-            total: relatorio.passivos.circulantes.total.formatar("pt-BR"),
-        },
-        naoCirculantes: {
-            itens: formatar(relatorio.passivos.naoCirculantes.itens),
-            total: relatorio.passivos.naoCirculantes.total.formatar("pt-BR"),
-        },
-        patrimonioLiquido: {
-            itens: formatar(relatorio.passivos.patrimonioLiquido.itens),
-            total: relatorio.passivos.patrimonioLiquido.total.formatar("pt-BR"),
-        },
-        total: relatorio.passivos.total.formatar("pt-BR"),
-    },
-    situacaoPatrimonial: relatorio.situacaoPatrimonial,
-};
-
-function formatar(itens: CoisaComValorMonetario[]) {
-    return itens.map((item) => ({
-        nome: item.nome,
-        valor: item.valor.formatar("pt-BR"),
-    }));
-}
-
-console.log(JSON.stringify(relatorioFormatado, null, 4));
-
-/*
-{
-    "ativos": {
-        "circulantes": {
-            "itens": [
-                {
-                    "nome": "saldo em conta bancária",
-                    "valor": "R$ 500.000,00"
-                },
-                {
-                    "nome": "matéria prima",
-                    "valor": "R$ 200.000,00"
-                }
-            ],
-            "total": "R$ 700.000,00"
-        },
-        "naoCirculantes": {
-            "itens": [],
-            "total": "R$ 0,00"
-        },
-        "total": "R$ 700.000,00"
-    },
-    "passivos": {
-        "circulantes": {
-            "itens": [
-                {
-                    "nome": "Salários do mês",
-                    "valor": "R$ 100.000,00"
-                },
-                {
-                    "nome": "Fornecedores do mês",
-                    "valor": "R$ 500,00"
-                }
-            ],
-            "total": "R$ 100.500,00"
-        },
-        "naoCirculantes": {
-            "itens": [],
-            "total": "R$ 0,00"
-        },
-        "patrimonioLiquido": {
-            "itens": [
-                {
-                    "nome": "Capital social",
-                    "valor": "R$ 1.000,00"
-                },
-                {
-                    "nome": "Lucro acumulado",
-                    "valor": "R$ 598.500,00"
-                }
-            ],
-            "total": "R$ 599.500,00"
-        },
-        "total": "R$ 700.000,00"
-    },
-    "situacaoPatrimonial": "Positiva"
-}
-*/
+const totalAtivos = somar(ativo);
+const totalPassivos = somar(passivo);
+const totalPL = somar(patrimonioLiquido);
+expect(totalAtivos.igualA(totalPassivos.adicionar(totalPL))).toBe(true);
